@@ -1,0 +1,3 @@
+rootProject.name = 'Implementation'
+include ':Interface'
+project(':Interface').projectDir = new File("${rootDir}/../Interface")
