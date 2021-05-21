@@ -30,6 +30,7 @@ public class SQLClassLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        // initialize the database
         Path filePath = Path.of("classes/Person.class");
         if (Files.exists(filePath)){
 
@@ -40,6 +41,7 @@ public class SQLClassLoader implements CommandLineRunner {
             logger.info("All files -> {}", repository.findAll());
         }
 
+        // start the class loader
         SqlServerClassLoader cl = new SqlServerClassLoader(repository);
         Class clazz = cl.findClass("com.pravinyo.dummy.Person");
         Class[] cArg = new Class[3]; //Our constructor has 3 arguments
