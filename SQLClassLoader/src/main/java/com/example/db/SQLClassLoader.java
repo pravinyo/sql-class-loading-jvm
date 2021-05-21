@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Date;
 
 @SpringBootApplication
 public class SQLClassLoader implements CommandLineRunner {
@@ -41,7 +42,11 @@ public class SQLClassLoader implements CommandLineRunner {
 
         SqlServerClassLoader cl = new SqlServerClassLoader(repository);
         Class clazz = cl.findClass("com.pravinyo.dummy.Person");
-        IPerson person = (IPerson) clazz.getDeclaredConstructor().newInstance();
+        Class[] cArg = new Class[3]; //Our constructor has 3 arguments
+        cArg[0] = String.class; //First argument
+        cArg[1] = String.class; //Second argument
+        cArg[2] = Date.class; //Third argument
+        IPerson person = (IPerson) clazz.getDeclaredConstructor(cArg).newInstance("Pravin","India", new Date());
         System.out.println(person);
     }
 }

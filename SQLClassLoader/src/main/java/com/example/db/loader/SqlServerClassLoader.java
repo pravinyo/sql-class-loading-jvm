@@ -5,8 +5,7 @@ import com.example.db.data.ClassFile;
 import com.example.db.data.ClassFileDataRepository;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Locale;
+import java.util.Optional;
 
 public class SqlServerClassLoader extends ClassLoader {
     private final ClassLoader parent;
@@ -38,19 +37,13 @@ public class SqlServerClassLoader extends ClassLoader {
     }
 
     private Class<?> loadClassFromDatabase(String name) throws SQLException, ClassNotFoundException {
-        List<ClassFile> files = repository.findAll();
+        ClassFile returnClass;
 
-        ClassFile returnClass = null;
-
-        for (ClassFile cf: files) {
-            if (cf.getName().toLowerCase(Locale.ROOT).equals(name.toLowerCase(Locale.ROOT))){
-                returnClass = cf;
-            }
-        }
-
-        if(returnClass == null){
+        Optional<ClassFile> optionalClassFile = repository.findByName(name);
+        if(optionalClassFile.isEmpty()){
             throw new ClassNotFoundException();
         }
+        returnClass = optionalClassFile.get();
 
         return defineClass(name, returnClass.getClassFile(), 0, returnClass.getClassFile().length);
     }
